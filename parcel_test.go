@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -51,7 +52,7 @@ func TestAddGetDelete(t *testing.T) {
 	// проверьте, что значения всех полей в полученном объекте совпадают со значениями полей в переменной parcel
 	testParcel, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, parcel, testParcel)
+	assert.Equal(t, parcel, testParcel)
 	// delete
 	// удалите добавленную посылку, убедитесь в отсутствии ошибки
 	// проверьте, что посылку больше нельзя получить из БД
@@ -86,7 +87,7 @@ func TestSetAddress(t *testing.T) {
 	// получите добавленную посылку и убедитесь, что адрес обновился
 	testParcel, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, newAddress, testParcel.Address)
+	assert.Equal(t, newAddress, testParcel.Address)
 }
 
 // TestSetStatus проверяет обновление статуса
@@ -115,7 +116,7 @@ func TestSetStatus(t *testing.T) {
 	// получите добавленную посылку и убедитесь, что статус обновился
 	testParcel, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, newStatus, testParcel.Status)
+	assert.Equal(t, newStatus, testParcel.Status)
 }
 
 // TestGetByClient проверяет получение посылок по идентификатору клиента
@@ -157,14 +158,14 @@ func TestGetByClient(t *testing.T) {
 	// убедитесь в отсутствии ошибки
 	// убедитесь, что количество полученных посылок совпадает с количеством добавленных
 	require.NoError(t, err)
-	require.Equal(t, len(parcels), len(storedParcels))
+	assert.Len(t, storedParcels, len(parcels))
 
 	// check
 	for _, parcel := range storedParcels {
 		// в parcelMap лежат добавленные посылки, ключ - идентификатор посылки, значение - сама посылка
 		// убедитесь, что все посылки из storedParcels есть в parcelMap
 		// убедитесь, что значения полей полученных посылок заполнены верно
-		require.Contains(t, parcelMap, parcel.Number)
-		require.Equal(t, parcelMap[parcel.Number], parcel)
+		assert.Contains(t, parcelMap, parcel.Number)
+		assert.Equal(t, parcelMap[parcel.Number], parcel)
 	}
 }
